@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+  <body>
+
+    <div id="container">
+      <textarea id="dataValue" placeholder="Enter value here"></textarea>
+      <button type="button" onclick="pushValue()">Push value</button>
+      <button type="button" onclick="clearPool()">Clear all value</button>
+      <button type="button" onclick="randomValue()">Random value</button>
+    </div>
+
+    <div id="printing">
+      <p id="randomizedValue">Randomized Value: None</p>
+      <p id="previousValue">Previous Value: None</p>
+      <p id="pool">Pool: None</p>
+    </div>
+
+    <script>
+      const prPrev = document.getElementById("previousValue");
+      const prPool = document.getElementById("pool");
+      const prRandom = document.getElementById("randomizedValue");
+
+      let pool = JSON.parse(localStorage.getItem("pool")) || [];
+      let value;
+      let random;
+
+      function pushValue() {
+        const data = document.getElementById("dataValue").value;
+        if (!data) {
+          alert("What are you trying to push? The air molecule?")
+          return;
+        }
+
+        pool.push(data);
+        value = data;
+
+        printValues();
+        save();
+
+        document.getElementById("dataValue").value = "";
+      }
+
+      function clearPool() {
+
+        if (pool.length <= 0 ) {
+          alert("There's nothing to clear!");
+          return;
+        }
+
+        for (let i = 0; i <= pool.length; i++) {
+          console.info(`Running`);
+          pool.splice(i, 1);
+          prev = null;
+          random = null;
+
+          if (pool.length > 0) clearPool();
+          console.info(`Current Pool Length: ${pool}`);
+        }
+
+          printValues();
+          save();
+      }
+
+      function randomValue() {
+        if (pool.length <= 0) {
+          alert("There's nothing to random!");
+          return;
+        }
+
+        random = pool[Math.floor(Math.random() * pool.length)];
+
+        printValues();
+        save();
+      }
+
+      function printValues() {
+        prPrev.textContent = `Previous Value: ${value || 'None'}`;
+        prPool.textContent = `Pool: ${pool.join(", ") || "None"}`;
+        prRandom.textContent = `Randomized Value: ${random || "None"}`;
+      }
+
+      function save() {
+        localStorage.setItem("pool", JSON.stringify(pool));
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        save();
+        printValues();
+        console.warn("I'm still working on life simulator, this is somewhat a thing to keep my codes alive, live simulator will not be released soon since im making sure everything works fine and there are enough features.")
+        console.error("Loaded, any errors/ infos will be shown below:"); // idk why
+      });
+
+      document.addEventListener("keydown", e => {
+        if (e.key === "Enter") pushValue();
+      })
+    </script>
+
+    <style>
+      body, div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 75px;
+      }
+
+      body {
+        flex-direction: column;
+        background: grey;
+      }
+
+      textarea, button {
+        resize: none;
+
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 30px;
+        font-style: italic;
+        font-weight: bold;
+
+        width: 275px;
+        height: 75px;
+
+        text-align: center;
+      }
+
+      textarea {
+        width: 300px;
+        height: 100px;
+      }
+
+      p {
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        font-style: italic;
+        font-weight: bold;
+        font-size: 35px;
+      }
+    </style>
+  </body>
+</html>
