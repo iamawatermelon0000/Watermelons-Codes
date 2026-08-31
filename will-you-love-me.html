@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        text-align: center;
+
+        background: #FA7FDD;
+      }
+
+      #a-container {
+        display: flex;
+        flex-direction: column;
+      }
+
+      #main-text {
+        font-family: "Comic Sans MS", cursive;
+        font-weight: bold;
+        font-style: italic;
+        font-size: 50px;
+      }
+
+      sub {
+        font-weight: bold;
+      }
+
+      #b-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row;
+        gap: 25px;
+      }
+
+      #ba, #bb {
+        width: 175px;
+        height: 50px;
+
+        font-family: "Arial Rounded MT Bold", sans-serif;
+        font-size: 29px;
+      }
+
+    </style>
+
+    <script defer>
+      let x, y;
+
+      function accept() {
+        setTimeout(() => {
+          document.body.style.background = "red";
+          document.body.innerHTML = "<h1 id='main-text' style='color: pink'></h1>"
+          document.getElementById("main-text").textContent = "i love u too :3";
+          setTimeout(() => { window.location.replace("https://www.youtube.com/watch?v=dQw4w9WgXcQ"); }, 500);
+        }, 500);
+      }
+
+      function decline() {
+        const bb = document.getElementById("bb");
+
+        if (Math.random() < 0.00000000001) {
+          document.body.innerHTML = "";
+          document.body.style.background = "black";
+          alert("Fine. Your choice.");
+          setTimeout(() => { window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ" }, 500);
+        }
+
+        bb.style.position = "absolute";
+
+        x = Math.floor(Math.random() * (window.innerWidth - 200) + 200);
+        y = Math.floor(Math.random() * (window.innerHeight - 100) + 100);
+        bb.style.left = x + 'px';
+        bb.style.top = y + 'px';
+      }
+    </script>
+
+  </head>
+  <body>
+
+    <div id="a-container">
+
+      <sub title="i dont remember who but u get the point">!!! THIS IS NOT MY IDEA, THE ORIGNAL IDEA BELONGS TO SOMEONE ON THE INTERNET. !!!</sub>
+      <h2 id="main-text">do u love me?</h2>
+
+
+      <div id="b-container">
+      <button id="ba" type="button" onclick="accept()">Yes!!!</button>
+      <button id="bb" type="button" onclick="decline()">NO!!!</button>
+      </div>
+
+      </div>
+
+  </body>
+</html>
