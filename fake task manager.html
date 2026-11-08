@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>your fake task manager</title>
+
+    <style>
+      body {
+        display: flex;
+        justify-content:  center;
+        align-items: center;
+        flex-direction: column;
+        gap: 75px;
+
+        font-family: 'Courier New', Courier, monospace;
+        font-weight: bold;
+        font-size: 25px;
+        text-align: center;
+      }
+
+      div {
+        display: flex;
+        justify-content:  center;
+        align-items: center;
+        border: 2px solid black;
+        gap: 50px;
+      }
+
+      #performance-stats {
+        border: none;
+      }
+
+      #custom-stats {
+        position: fixed;
+        bottom: 20px;
+        gap: 30px;
+      }
+
+      textarea, select, button {
+        resize: none;
+        font-size: 25px;
+        font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        font-weight: bold;
+        font-size: 25px;
+        text-align: center;
+      }
+
+      #buttons {
+        position: fixed;
+        left: 10px;
+        top: 200px;
+        flex-direction: column;
+      }
+
+      button {
+        width: 125px;
+        height: calc(125px / 2);
+      }
+
+      select {
+        width: 200px;
+      }
+
+      .x {
+        flex-direction: column;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="performance-stats">
+
+      <div class="x">
+      <p id="prCPU">CPU Usage:<br>-GHz<br> -%</p>
+      <p id="prGPU">GPU Usage:<br> -GB<br> -%</p>
+      </div>
+
+      <div class="x">
+      <p id="prRAM">RAM Usage:<br> -GB</p>
+      <p id="prDisk">Disk Usage:<br>Read: - MB/s, Write: - MB/s</p>
+      </div>
+    </div>
+
+    <div id="buttons">
+    <button type="button" onclick="start()">Start</button>
+    <button type="button" onclick="stop()">Stop</button>
+    </div>
+
+    <div id="custom-stats">
+
+      <div id="cpu-selection">
+
+      <select id="cpu">CPU:
+
+        <option value="">CPU</option>
+
+        <option value="9950x3d" title="Overall Clocks: Base - 4.3GHz, Turbo - 5.7GHz">AMD Ryzen 9 9950X3D</option>
+
+        <option value="285k" title="Overall Clocks: Base - 3.7GHz, Turbo - 5.7GHz">Intel Core Ultra 9 285K</option>
+
+        <option value="7800x3d" title="Overall Clocks: Base - 4.2GHz, Turbo - 5.0GHz">AMD Ryzen 7 7800X3D</option>
+
+        <option value="14400f" title="Overall Clocks: Base - 2.5GHz, Turbo - 4.7GHz">Intel i5 14400F</option>
+
+        <option value="9950xkf" title="10.3ghz base 20ghz turbo trust trust">Intel Core Ultra 9 9950XKF</option>
+      </select>
+      </div>
+
+      <div id="gpu-selection">
+        <select id="gpu">
+
+          <option value="">GPU</option>
+
+          <option value="5090">NVIDIA RTX 5090</option>
+          <option value="5080">NVIDIA RTX 5080</option>
+
+          <option value="9070xt">AMD Radeon RX 9070XT</option>
+          <option value="7800xt">AMD Radeon RX 7800XT</option>
+
+          <option value="b580">Intel Arc B580</option>
+          <option value="a770">Intel Arc A770</option>
+        </select>
+      </div>
+
+      <div id="disk-selection">
+        <select id="disk">
+
+          <option value="">Disk</option>
+
+          <option value="t705" title="Max R&W speed: 14.500MB/s - 4.000MB/s">Crucial T705</option>
+          <option value="p310" title="Max R&W speed: 7.100MB/s - 6.000MB/s">Crucial P310</option>
+
+          <option value="kc600" title="Max R&W speed: 550MB/s - 520MB/s">Kingston KC600</option>
+          <option value="a400" title="Max R&W speed: 500MB/s - 450MB/s">Kingston A400</option>
+
+          <option value="hdd" title="idk like 120 to 200mb/s r&w">10k RPM HDD</option>
+        </select>
+      </div>
+
+      <textarea id="ram" placeholder="Ammount of RAM goes here (GB)"></textarea>
+
+    </div>
+
+    <script>
+
+      const prCPU = document.getElementById("prCPU");
+      const prGPU = document.getElementById("prGPU");
+      const prRAM = document.getElementById("prRAM");
+
+      let cpu;
+      let gpu;
+      let ram;
+      let disk;
+
+      let i;
+
+      const cpus = { // Ghz
+        '9950x3d': {
+          base: 4.3,
+          turbo: 5.7
+        },
+
+        '7800x3d': {
+          base: 4.2,
+          turbo: 5.0
+        },
+
+        '285k': {
+          base: 3.7,
+          turbo: 5.7
+        },
+
+        "14400f": {
+          base: 2.5,
+          turbo: 4.7
+        },
+
+        "9950xkf": {
+          base: 10.3,
+          turbo: 20
+        }
+      }
+
+      const gpus = { // GB VRAM
+
+        '5090': 32,
+        '5080': 16,
+
+        '9070xt': 16,
+        '7800xt': 16,
+
+        'b580': 16,
+        'a770': Math.random() < 0.5 ? 8 : 16
+      }
+
+      const disks = { // MB/s
+        't705': {
+          'read': 14500,
+          'write': 4000
+        },
+
+        'p310': {
+          'read': 7100,
+          'write': 6000
+        },
+
+        'kc600': {
+          'read': 550,
+          'write': 520
+        },
+
+        'a400': {
+          'read': 500,
+          'write': 450
+        },
+
+        'hdd': {
+          'read': 120,
+          'write': 200
+        }
+      }
+
+      function start() {
+
+        if (i) clearInterval(i);
+
+        cpu = document.getElementById("cpu").value;
+        gpu = document.getElementById("gpu").value;
+        ram = document.getElementById("ram").value;
+        disk = document.getElementById("disk").value;
+
+        if (!cpu || !gpu || !ram || !disk) { alert("Recheck ur specs!"); return; }
+        if (ram.toLowerCase().includes("gb")) { alert("Numbers only!"); return; };
+        if (!Number.isFinite(Number(ram)) || Number(ram) < 4) ram = 4;
+        if (Number(ram) > 1024) ram = 1024
+
+        if (cpu in cpus) {
+          cpu = {base: cpus[cpu]?.base, turbo: cpus[cpu]?.turbo};
+        }
+
+        if (gpu in gpus) {
+          gpu = gpus[gpu];
+        }
+
+        if (disk in disks) {
+          disk = {read: disks[disk]?.read, write: disks[disk]?.write};
+        }
+
+        i = setInterval(() => {
+          prCPU.innerHTML = `CPU Usage:<br>${(Math.random() * (cpu.turbo - cpu.base) + cpu.base).toFixed(2)}Ghz<br>${Math.floor(Math.random() * 100) + 1}%`;
+
+          prGPU.innerHTML = `GPU Usage:<br>${(Math.random() * gpu).toFixed(2)}GB/ ${gpu}GB<br>${Math.floor(Math.random() * 100) + 1}%`;
+
+          prRAM.innerHTML = `RAM Usage:<br>${(Math.random() * ram).toFixed(2)}GB/ ${ram}GB<br>${Math.floor(Math.random() * (6000 - 1000) + 1000)}MT/s`;
+
+          prDisk.innerHTML = `Disk Usage:<br>Read: ${Math.floor(Math.random() * disk.read) + 1}MB/s, Write: ${Math.floor(Math.random() * disk.write) + 1}MB/s`;
+        }, 1500);
+      };
+
+      function stop() {
+          clearInterval(i)
+
+          cpu = null;
+          gpu = null;
+          ram = null;
+          disk = null;
+
+          prCPU.innerHTML = `CPU Usage:<br>-Ghz<br>-%`;
+
+          prGPU.innerHTML = `GPU Usage:<br>-GB/ -GB<br>-%`;
+
+          prRAM.innerHTML = `RAM Usage:<br>-GB/ -GB<br>-MT/s`;
+
+          prDisk.innerHTML = `Disk Usage:<br>Read: - MB/s, Write: - MB/s`
+      }
+
+console.log("%ci-have-a-crush-on-my-classmate-but-she-doesnt-like-me-back-:(","font-size:0.1px;color:white");
+    </script>
+
+  </body>
+</html>
